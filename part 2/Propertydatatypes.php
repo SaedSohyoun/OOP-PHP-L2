@@ -1,10 +1,10 @@
 <?php
 
-class Typbijarg
+class Propertydatatypes
 {
-    public $name;
-    public $genre;
-    public $seen;
+    public string $name;
+    public string $genre;
+    public int $seen;
 
     public function __construct(string $name, string $genre, int $seen)
     {
@@ -19,3 +19,4 @@ class Typbijarg
     }
 
 }
+
