@@ -1,6 +1,6 @@
 <?php
 
-class NamedArgument
+class Named-Argument
 {
     public $name;
     public $price;
