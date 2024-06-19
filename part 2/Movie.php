@@ -1,10 +1,10 @@
 <?php
 
-class Typbijarg
+class Movie
 {
-    public $name;
-    public $genre;
-    public $seen;
+    public string $name;
+    public string $genre;
+    public int $seen;
 
     public function __construct(string $name, string $genre, int $seen)
     {
