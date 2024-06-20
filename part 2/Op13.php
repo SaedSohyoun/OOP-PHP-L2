@@ -72,6 +72,25 @@ $player3 = new Player("Charlie");
 $player3->addGame($game1);
 $player3->addGame($game5);
 
-print_r($player1->getPlayerInfo());
-print_r($player2->getPlayerInfo());
-print_r($player3->getPlayerInfo());
+$players = [$player1, $player2, $player3];
+
+function displayPlayersInfo(array $players): void {
+    echo "<table border='1'>";
+    echo "<tr><th>Player Name</th><th>Game Name</th><th>Description</th><th>Price</th><th>Tags</th></tr>";
+    foreach ($players as $player) {
+        $playerInfo = $player->getPlayerInfo();
+        $playerName = htmlspecialchars($playerInfo['Player Name']);
+        foreach ($playerInfo['Games'] as $game) {
+            echo "<tr>";
+            echo "<td>" . $playerName . "</td>";
+            echo "<td>" . htmlspecialchars($game['Name']) . "</td>";
+            echo "<td>" . htmlspecialchars($game['Description']) . "</td>";
+            echo "<td>" . htmlspecialchars(number_format($game['Price'], 2)) . "</td>";
+            echo "<td>" . htmlspecialchars(implode(", ", $game['Tags'])) . "</td>";
+            echo "</tr>";
+        }
+    }
+    echo "</table>";
+}
+
+displayPlayersInfo($players);
