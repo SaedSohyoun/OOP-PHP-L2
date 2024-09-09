@@ -2,8 +2,8 @@
 
 class BankAccount
 {
-    public string $accountNumber;
-    public float $balance;
+    public $accountNumber;
+    public $balance;
 
     public function __construct(string $accountNumber, float $balance = 0)
     {
@@ -16,7 +16,7 @@ class BankAccount
         return $this->accountNumber;
     }
 
-    public function setAccountNumber(string $newAccountNumber): void
+    public function setAccountNumber($newAccountNumber)
     {
         $this->accountNumber = $newAccountNumber;
     }

@@ -1,87 +1,89 @@
 <?php
-class Book {
-    private $title;
-    private $author;
-    private $price;
 
-    public function __construct($title, $author, $price) {
+class Book {
+    private string $title;
+    private string $author;
+    private float $price;
+
+    public function __construct(string $title, string $author, float $price) {
         $this->title = $title;
         $this->author = $author;
         $this->price = $price;
     }
 
-    public function getTitle() {
+    public function getTitle(): string {
         return $this->title;
     }
 
-    public function getAuthor() {
+    public function getAuthor(): string {
         return $this->author;
     }
 
-    public function getPrice() {
+    public function getPrice(): float {
         return $this->price;
     }
 
-    public function __toString() {
-        return "{$this->title} by {$this->author}, priced at {$this->price}";
+    public function setBook(string $title, string $author, float $price): void {
+        $this->title = $title;
+        $this->author = $author;
+        $this->price = $price;
     }
 }
 
-class Catalog {
-    private $books = array();
+class BookCatelog {
+    private array $books = [];
 
-    public function addBook($book) {
+    public function addBook(Book $book) {
         $this->books[] = $book;
     }
 
-    public function displayBooks() {
-        echo "<table border='1'>";
-        echo "<tr><th>Title</th><th>Author</th><th>Price</th></tr>";
-        foreach ($this->books as $book) {
-            echo "<tr>";
-            echo "<td>" . htmlspecialchars($book->getTitle()) . "</td>";
-            echo "<td>" . htmlspecialchars($book->getAuthor()) . "</td>";
-            echo "<td>" . htmlspecialchars($book->getPrice()) . "</td>";
-            echo "</tr>";
-        }
-        echo "</table>";
+    public function removeBook(Book $bookToRemove) {
+        $this->books = array_filter($this->books, function($book) use ($bookToRemove) {
+            return $book->getTitle() !== $bookToRemove->getTitle();
+        });
     }
 
-    public function averagePrice() {
-        if (empty($this->books)) {
+    public function getCatelog(): array {
+        return $this->books;
+    }
+
+    public function getAvgPrice(): float {
+        $totalPrice = 0;
+        $count = count($this->books);
+        if ($count > 0) {
+            foreach ($this->books as $book) {
+                $totalPrice += $book->getPrice();
+            }
+            return round($totalPrice / $count, 2);
+        } else {
             return 0;
         }
-        $total = 0;
-        foreach ($this->books as $book) {
-            $total += $book->getPrice();
-        }
-        return $total / count($this->books);
-    }
-
-    public function removeBook($title) {
-        foreach ($this->books as $key => $book) {
-            if ($book->getTitle() === $title) {
-                unset($this->books[$key]);
-                break;
-            }
-        }
-        $this->books = array_values($this->books);
     }
 }
 
-$catalog = new Catalog();
+$boek1 = new Book("Leren programmeren in C#", "Michiel Rotteveel", 45);
+$boek2 = new Book("Android en Kotlin", "Krijn Hoogendorp", 44);
+$boek3 = new Book("Leren programmeren, meten en sturen met de arduino", "Jacco de Jong", 27.95);
 
-$book1 = new Book("Leren programmeren in C#", "Michiel Rotteveel", 45);
-$book2 = new Book("Android en Kotlin", "Krijn Hoogendorp", 44);
-$book3 = new Book("Leren programmeren, meten en sturen met de arduino", "Jacco de Jong", 27.95);
+$catalog = new BookCatelog();
+$catalog->addBook($boek1);
+$catalog->addBook($boek2);
+$catalog->addBook($boek3);
 
-$catalog->addBook($book1);
-$catalog->addBook($book2);
-$catalog->addBook($book3);
+function displayCatalogAsTable(BookCatelog $catalog) {
+    echo "<h3>Lijst van boeken is nu:</h3>\n";
+    echo "<table border='1' cellpadding='5' cellspacing='0'>\n";
+    echo "<tr><th>Title</th><th>Auteur</th><th>Prijs</th></tr>\n";
+    foreach ($catalog->getCatelog() as $book) {
+        echo "<tr><td>" . $book->getTitle() . "</td><td>" . $book->getAuthor() . "</td><td>" . $book->getPrice() . "</td></tr>\n";
+    }
+    echo "</table>\n";
+    echo "<p>De gemiddelde prijs is: " . $catalog->getAvgPrice() . "</p>\n";
+}
 
-$catalog->displayBooks();
-echo "<br>De gemiddelde prijs is: " . number_format($catalog->averagePrice(), 2);
+displayCatalogAsTable($catalog);
 
-$catalog->removeBook("Android en Kotlin");
-$catalog->displayBooks();
-echo "<br>De gemiddelde prijs is: " . number_format($catalog->averagePrice(), 2);
+$catalog->removeBook($boek2);
+
+echo "<h3>Boek: Android en Kotlin is verwijderd</h3>\n";
+displayCatalogAsTable($catalog);
