@@ -1,6 +1,7 @@
 <?php
 
-class Book {
+class Book
+{
     private string $title;
     private string $author;
     private float $price;
